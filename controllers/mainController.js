@@ -19,6 +19,39 @@ class MainController {
     return { subtotal, tax_amount, total, tax_rate: taxRate };
   }
 
+  // TEST API ENDPOINT - ADD THIS METHOD
+  async testAPI(req, res) {
+    try {
+      // Test database connection
+      const dbResult = await query('SELECT NOW()');
+      
+      res.json({
+        success: true,
+        message: 'InvoQuot API is working!',
+        database_time: dbResult.rows[0].now,
+        environment: process.env.NODE_ENV || 'development',
+        company: process.env.COMPANY_NAME || 'AksagenSet Services',
+        version: '1.0.0',
+        endpoints: {
+          health: '/api/health',
+          test: '/api/test',
+          clients: '/api/clients',
+          invoices: '/api/invoices',
+          quotations: '/api/quotations',
+          products: '/api/products',
+          payments: '/api/payments'
+        }
+      });
+    } catch (error) {
+      console.error('Database test error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Database connection failed',
+        error: error.message
+      });
+    }
+  }
+
   // CLIENTS
   async getClients(req, res) {
     try {
@@ -315,7 +348,7 @@ class MainController {
     }
   }
 
-  // NEW METHODS FOR ENHANCED FUNCTIONALITY
+  // PRODUCTS
   async getProducts(req, res) {
     try {
       const result = await query('SELECT * FROM products WHERE company_id = 1 AND is_active = true ORDER BY name');
@@ -340,6 +373,7 @@ class MainController {
     }
   }
 
+  // PAYMENTS
   async getPayments(req, res) {
     try {
       const result = await query(`
