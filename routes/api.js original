@@ -1,0 +1,20 @@
+// routes/api.js
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/mainController');
+
+// Clients
+router.post('/clients', controller.createClient);
+router.get('/clients', controller.getClients);
+
+// Invoices
+router.post('/invoices', controller.createInvoice);
+router.get('/invoices', controller.getInvoices);
+router.get('/invoices/:id/pdf', controller.generateInvoicePDF);
+
+// Quotations
+router.post('/quotations', controller.createQuotation);
+router.get('/quotations', controller.getQuotations);
+router.get('/quotations/:id/pdf', controller.generateQuotationPDF);
+
+module.exports = router;
